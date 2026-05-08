@@ -7,11 +7,14 @@ import { useCartStore, selectTotalItems } from '@/shared/stores/cartStore'
 
 export function Navbar() {
   const { user, logout } = useAuthStore()
-  const cartCount = useCartStore(selectTotalItems)
+  const rawCartCount = useCartStore(selectTotalItems)
+  const clearCart = useCartStore((state) => state.clearCart)
+  const cartCount = user ? rawCartCount : 0
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
+    clearCart()
     navigate('/')
   }
 
@@ -42,7 +45,7 @@ export function Navbar() {
           </NavLink>
 
           {/* Cart icon — badge shows real count from cartStore */}
-          <Link to="/cart" className="relative ml-1">
+          <Link to={user ? '/cart' : '/auth/login'} className="relative ml-1">
             <Button
               variant="ghost"
               size="icon"

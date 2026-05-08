@@ -1,14 +1,18 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, ShoppingCart, Star } from 'lucide-react'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/lib/utils'
+import { useAuthStore } from '@/shared/stores/authStore'
 import { useCartStore } from '@/shared/stores/cartStore'
 import { MOCK_PRODUCTS } from '@/features/products/data/mockProducts'
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const user = useAuthStore((state) => state.user)
   const addItem = useCartStore((state) => state.addItem)
+  const location = useLocation()
+  const navigate = useNavigate()
   const product = MOCK_PRODUCTS.find((item) => item.id === id)
 
   if (!product) {
@@ -34,6 +38,16 @@ export function ProductDetailPage() {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null
   const isOutOfStock = product.stock === 0
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate('/auth/login', {
+        state: { from: `${location.pathname}${location.search}` },
+      })
+      return
+    }
+
+    addItem(product)
+  }
 
   return (
     <main className="container mx-auto px-4 py-10">
@@ -110,7 +124,7 @@ export function ProductDetailPage() {
           <Button
             size="lg"
             disabled={isOutOfStock}
-            onClick={() => addItem(product)}
+            onClick={handleAddToCart}
             className="mt-2 w-full sm:w-fit"
           >
             <ShoppingCart />

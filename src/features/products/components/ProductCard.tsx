@@ -1,42 +1,60 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
+import { useAuthStore } from '@/shared/stores/authStore'
 import { useCartStore } from '@/shared/stores/cartStore'
 import type { Product } from '@/shared/types'
 
 interface ProductCardProps {
   product: Product
   className?: string
+  priority?: boolean
 }
 
-export function ProductCard({ product, className }: ProductCardProps) {
+export function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const { id, name, price, originalPrice, images, category, rating, stock } = product
+  const user = useAuthStore((state) => state.user)
   const addItem = useCartStore((state) => state.addItem)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const discount = originalPrice
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
     : null
 
   const isOutOfStock = stock === 0
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate('/auth/login', {
+        state: { from: `${location.pathname}${location.search}` },
+      })
+      return
+    }
+
+    addItem(product)
+  }
 
   return (
     <article
       className={cn(
-        'group flex flex-col rounded-xl border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md',
+        'group flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md',
         className
       )}
     >
       {/* Product image */}
-      <Link to={`/product/${id}`} className="relative block overflow-hidden rounded-t-xl">
+      <Link to={`/product/${id}`} className="relative block overflow-hidden">
         <div className="aspect-square bg-muted">
           {images[0] ? (
             <img
               src={images[0]}
               alt={name}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
+              loading={priority ? 'eager' : 'lazy'}
+              decoding="async"
+              fetchPriority={priority ? 'high' : 'auto'}
+              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-muted-foreground">
@@ -61,7 +79,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
       </Link>
 
       {/* Card body */}
-      <div className="flex flex-1 flex-col gap-3 p-3">
+      <div className="flex flex-1 flex-col gap-2.5 p-3">
         <Badge variant="outline" className="w-fit capitalize text-xs">
           {category}
         </Badge>
@@ -81,9 +99,9 @@ export function ProductCard({ product, className }: ProductCardProps) {
         </div>
 
         {/* Price + Add to Cart */}
-        <div className="mt-auto flex items-end justify-between gap-2">
+        <div className="mt-auto flex flex-col gap-3">
           <div className="flex items-baseline gap-1.5">
-            <span className="text-base font-bold text-foreground">
+            <span className="text-sm font-bold text-foreground">
               ${price.toFixed(2)}
             </span>
             {originalPrice && originalPrice > price && (
@@ -94,14 +112,14 @@ export function ProductCard({ product, className }: ProductCardProps) {
           </div>
 
           <Button
-            size="icon"
-            variant="outline"
+            size="default"
             aria-label={`Add ${name} to cart`}
             disabled={isOutOfStock}
-            onClick={() => addItem(product)}
-            className="shrink-0"
+            onClick={handleAddToCart}
+            className="w-full bg-black text-white hover:bg-black/85"
           >
             <ShoppingCart />
+            Add to cart
           </Button>
         </div>
       </div>

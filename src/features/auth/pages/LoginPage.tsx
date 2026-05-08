@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { GoogleAuthButton } from '@/features/auth/components/GoogleAuthButton'
@@ -14,16 +14,19 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
 
   const { login, loginWithGoogle, status, error, clearError } = useAuthStore()
+  const location = useLocation()
   const navigate = useNavigate()
 
   const isLoading = status === 'loading'
+  const locationState = location.state as { from?: string } | null
+  const redirectTo = locationState?.from?.startsWith('/') ? locationState.from : '/'
 
   // Redirect to home on successful authentication
   useEffect(() => {
     if (status === 'authenticated') {
-      navigate('/', { replace: true })
+      navigate(redirectTo, { replace: true })
     }
-  }, [status, navigate])
+  }, [status, navigate, redirectTo])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
