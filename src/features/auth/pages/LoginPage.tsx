@@ -54,8 +54,8 @@ export function LoginPage() {
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="bg-card px-2 text-muted-foreground">
+        <div className="relative flex justify-center text-sm">
+          <span className="bg-white px-3 font-medium text-muted-foreground">
             Or sign in with email
           </span>
         </div>
@@ -129,7 +129,7 @@ export function LoginPage() {
         </div>
 
         {/* Submit */}
-        <Button type="submit" className="mt-1 w-full" disabled={isLoading} size="sm">
+        <Button type="submit" className="mt-1 h-11 w-full text-base font-semibold" disabled={isLoading} size="lg">
           {isLoading ? (
             <>
               <Loader2 className="animate-spin" />
@@ -146,14 +146,14 @@ export function LoginPage() {
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="bg-card px-2 text-muted-foreground">
+        <div className="relative flex justify-center text-sm">
+          <span className="bg-white px-3 font-medium text-muted-foreground">
             Don't have an account?
           </span>
         </div>
       </div>
 
-      <Button asChild variant="outline" size="sm" className="w-full">
+      <Button asChild variant="outline" size="lg" className="h-11 w-full text-base font-semibold">
         <Link to="/auth/signup">Create account</Link>
       </Button>
     </AuthLayout>

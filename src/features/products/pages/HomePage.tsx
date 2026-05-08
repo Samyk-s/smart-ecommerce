@@ -56,7 +56,7 @@ export function HomePage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3">
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Sort by</span>
             <select
