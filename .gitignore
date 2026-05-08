@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# AI assistant/tooling directories
+.claude/
+.codex/
+.cursor/
+.windsurf/
+.aider*
+
 # Environment variables
 .env
 .env.*
