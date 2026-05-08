@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Star } from 'lucide-react'
+import { ShoppingCart, Star, TrendingUp } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
@@ -49,18 +49,18 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   return (
     <article
       className={cn(
-        'group flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md',
+        'group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-card-foreground shadow-sm shadow-zinc-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/10',
         className
       )}
     >
       {/* Product image */}
       <Link to={`/product/${id}`} className="relative block overflow-hidden">
-        <div className="aspect-square bg-muted">
+        <div className="aspect-[4/3] bg-gradient-to-br from-zinc-100 to-emerald-50">
           {images[0] ? (
             <img
               src={images[0]}
               alt={name}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading={priority ? 'eager' : 'lazy'}
               decoding="async"
               fetchPriority={priority ? 'high' : 'auto'}
@@ -75,10 +75,15 @@ export function ProductCard({ product, className, priority = false }: ProductCar
 
         {/* Discount badge */}
         {discount !== null && discount > 0 && (
-          <Badge className="absolute left-2 top-2" variant="destructive">
+          <Badge className="absolute left-3 top-3 border-red-200 bg-red-50 text-red-700 shadow-sm" variant="destructive">
             -{discount}%
           </Badge>
         )}
+
+        <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-zinc-700 shadow-sm backdrop-blur">
+          <Star className="size-3 fill-amber-400 text-amber-400" />
+          {rating.average.toFixed(1)}
+        </div>
 
         {/* Out of stock overlay */}
         {isOutOfStock && (
@@ -89,29 +94,35 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       </Link>
 
       {/* Card body */}
-      <div className="flex flex-1 flex-col gap-2.5 p-3">
-        <Badge variant="outline" className="w-fit capitalize text-xs">
-          {category}
-        </Badge>
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <Badge variant="outline" className="w-fit border-emerald-200 bg-emerald-50/80 capitalize text-xs text-emerald-700">
+            {category}
+          </Badge>
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
+            <TrendingUp className="size-3" />
+            {stock > 0 ? `${stock} left` : 'Sold out'}
+          </span>
+        </div>
 
         <Link
           to={`/product/${id}`}
-          className="line-clamp-2 text-sm font-medium leading-snug text-foreground hover:underline hover:underline-offset-2"
+          className="line-clamp-2 min-h-10 text-base font-bold leading-snug text-foreground transition-colors hover:text-emerald-700"
         >
           {name}
         </Link>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 rounded-full bg-zinc-50 px-2.5 py-1.5">
           <StarRating value={rating.average} />
           <span className="text-xs text-muted-foreground">
-            ({rating.count.toLocaleString()})
+            {rating.count.toLocaleString()} reviews
           </span>
         </div>
 
         {/* Price + Add to Cart */}
         <div className="mt-auto flex flex-col gap-3">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-sm font-bold text-foreground">
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-extrabold tracking-tight text-foreground">
               ${price.toFixed(2)}
             </span>
             {originalPrice && originalPrice > price && (
@@ -126,7 +137,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
             aria-label={`Add ${name} to cart`}
             disabled={isOutOfStock}
             onClick={handleAddToCart}
-            className="w-full bg-black text-white hover:bg-black/85"
+            className="h-10 w-full rounded-xl bg-black text-sm font-semibold text-white shadow-sm shadow-zinc-950/15 hover:bg-black/85"
           >
             <ShoppingCart />
             Add to cart

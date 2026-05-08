@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, SlidersHorizontal, Sparkles } from 'lucide-react'
 import { ProductCard } from '@/features/products/components/ProductCard'
 import { MOCK_PRODUCTS } from '@/features/products/data/mockProducts'
 import { Button } from '@/shared/components/ui/button'
@@ -44,10 +44,14 @@ export function HomePage() {
   }
 
   return (
-    <main className="container mx-auto px-6 py-10 sm:px-8 lg:px-12 xl:px-16">
+    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_34%,#f6fef9_100%)] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
       {/* Page header */}
-      <div className="mb-8 flex flex-col gap-4">
+      <div className="mx-auto mb-8 flex max-w-5xl flex-col gap-6">
         <div className="text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-4 py-1.5 text-sm font-semibold text-emerald-700 shadow-sm shadow-emerald-900/5">
+            <Sparkles className="size-4" />
+            Fresh picks for you
+          </div>
           <h1 className="bg-gradient-to-r from-zinc-950 via-zinc-700 to-emerald-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl">
             All Products
           </h1>
@@ -56,13 +60,14 @@ export function HomePage() {
           </p>
         </div>
 
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3">
-          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex w-full flex-wrap items-center justify-between gap-3">
+          <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <SlidersHorizontal className="size-4 text-emerald-600" />
             <span>Sort by</span>
             <select
               value={sortBy}
               onChange={handleSortChange}
-              className="h-8 rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground outline-none transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50"
+              className="h-9 rounded-xl border border-zinc-200 bg-white px-3 text-sm font-semibold text-foreground outline-none transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50"
             >
               <option value="featured">Featured</option>
               <option value="price-low">Price: low to high</option>
@@ -81,7 +86,7 @@ export function HomePage() {
       </div>
 
       {/* Product grid */}
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {visibleProducts.map((product, index) => (
           <ProductCard key={product.id} product={product} priority={index < 4} />
         ))}
