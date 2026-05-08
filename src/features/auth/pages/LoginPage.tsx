@@ -6,6 +6,7 @@ import { GoogleAuthButton } from '@/features/auth/components/GoogleAuthButton'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
+import { toast } from '@/shared/hooks/use-toast'
 import { useAuthStore } from '@/shared/stores/authStore'
 
 export function LoginPage() {
@@ -24,6 +25,11 @@ export function LoginPage() {
   // Redirect to home on successful authentication
   useEffect(() => {
     if (status === 'authenticated') {
+      toast({
+        title: 'Signed in',
+        description: 'Welcome back to SmartShop.',
+        variant: 'success',
+      })
       navigate(redirectTo, { replace: true })
     }
   }, [status, navigate, redirectTo])

@@ -3,6 +3,7 @@ import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
+import { toast } from '@/shared/hooks/use-toast'
 import { useAuthStore } from '@/shared/stores/authStore'
 import { useCartStore } from '@/shared/stores/cartStore'
 import type { Product } from '@/shared/types'
@@ -27,6 +28,10 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   const isOutOfStock = stock === 0
   const handleAddToCart = () => {
     if (!user) {
+      toast({
+        title: 'Sign in required',
+        description: 'Please sign in before adding products to your cart.',
+      })
       navigate('/auth/login', {
         state: { from: `${location.pathname}${location.search}` },
       })
@@ -34,6 +39,11 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     }
 
     addItem(product)
+    toast({
+      title: 'Added to cart',
+      description: `${name} is now in your cart.`,
+      variant: 'success',
+    })
   }
 
   return (
