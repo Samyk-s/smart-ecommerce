@@ -8,6 +8,25 @@ import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { useAuthStore } from '@/shared/stores/authStore'
 
+type PasswordStrength = 'weak' | 'normal' | 'strong'
+
+const getPasswordChecks = (value: string) => ({
+  length: value.length >= 8,
+  uppercase: /[A-Z]/.test(value),
+  lowercase: /[a-z]/.test(value),
+  number: /\d/.test(value),
+  special: /[^A-Za-z0-9]/.test(value),
+})
+
+const getPasswordStrength = (value: string): PasswordStrength => {
+  const checks = Object.values(getPasswordChecks(value))
+  const passed = checks.filter(Boolean).length
+
+  if (passed >= 5) return 'strong'
+  if (passed >= 3) return 'normal'
+  return 'weak'
+}
+
 export function SignupPage() {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
@@ -23,6 +42,9 @@ export function SignupPage() {
 
   const isLoading = status === 'loading'
   const displayedError = localError ?? error
+  const passwordChecks = getPasswordChecks(password)
+  const passwordStrength = getPasswordStrength(password)
+  const isPasswordValid = Object.values(passwordChecks).every(Boolean)
 
   // Redirect to home on successful authentication
   useEffect(() => {
@@ -37,6 +59,13 @@ export function SignupPage() {
 
     if (password !== confirmPassword) {
       setLocalError('Passwords do not match.')
+      return
+    }
+
+    if (!isPasswordValid) {
+      setLocalError(
+        'Password must include at least 8 characters, uppercase, lowercase, number, and special character.'
+      )
       return
     }
 
@@ -117,7 +146,7 @@ export function SignupPage() {
             <Input
               id="password"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Min. 8 characters"
+              placeholder="Example@123"
               autoComplete="new-password"
               disabled={isLoading}
               required
@@ -137,6 +166,12 @@ export function SignupPage() {
               {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
+          {password && (
+            <PasswordStrengthMeter
+              strength={passwordStrength}
+              checks={passwordChecks}
+            />
+          )}
         </div>
 
         {/* Confirm password */}
@@ -205,5 +240,67 @@ export function SignupPage() {
         <Link to="/auth/login">Sign in</Link>
       </Button>
     </AuthLayout>
+  )
+}
+
+interface PasswordStrengthMeterProps {
+  strength: PasswordStrength
+  checks: ReturnType<typeof getPasswordChecks>
+}
+
+function PasswordStrengthMeter({ strength, checks }: PasswordStrengthMeterProps) {
+  const strengthMeta = {
+    weak: {
+      label: 'Weak',
+      bar: 'bg-red-500',
+      text: 'text-red-600',
+      width: 'w-1/3',
+    },
+    normal: {
+      label: 'Normal',
+      bar: 'bg-[#f7941d]',
+      text: 'text-[#b85f00]',
+      width: 'w-2/3',
+    },
+    strong: {
+      label: 'Strong',
+      bar: 'bg-[#075da4]',
+      text: 'text-[#075da4]',
+      width: 'w-full',
+    },
+  }[strength]
+
+  const rules = [
+    { label: '8+ characters', passed: checks.length },
+    { label: 'uppercase', passed: checks.uppercase },
+    { label: 'lowercase', passed: checks.lowercase },
+    { label: 'number', passed: checks.number },
+    { label: 'special character', passed: checks.special },
+  ]
+
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-zinc-50/80 p-3">
+      <div className="mb-2 flex items-center justify-between text-xs font-semibold">
+        <span className="text-muted-foreground">Password strength</span>
+        <span className={strengthMeta.text}>{strengthMeta.label}</span>
+      </div>
+      <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200">
+        <div className={`h-full rounded-full ${strengthMeta.width} ${strengthMeta.bar}`} />
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {rules.map((rule) => (
+          <span
+            key={rule.label}
+            className={`rounded-full px-2 py-1 text-xs font-medium ${
+              rule.passed
+                ? 'bg-blue-50 text-[#075da4]'
+                : 'bg-white text-muted-foreground'
+            }`}
+          >
+            {rule.label}
+          </span>
+        ))}
+      </div>
+    </div>
   )
 }
