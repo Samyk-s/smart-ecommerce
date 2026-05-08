@@ -19,11 +19,13 @@ export function ResetPasswordPage() {
   const { resetPassword, verifyResetCode, status, error, clearError } = useAuthStore()
 
   const isLoading = status === 'loading'
-  const displayedError = localError ?? error
+  const missingCodeError = !code
+    ? 'Missing reset code. Please request a new password reset link.'
+    : null
+  const displayedError = localError ?? error ?? missingCodeError
 
   useEffect(() => {
     if (!code) {
-      setLocalError('Missing reset code. Please request a new password reset link.')
       return
     }
 

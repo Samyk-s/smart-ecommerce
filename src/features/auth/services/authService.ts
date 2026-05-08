@@ -72,7 +72,7 @@ const withAuthErrorMessage = async <T>(action: () => Promise<T>) => {
   try {
     return await action()
   } catch (error) {
-    throw new Error(getAuthErrorMessage(error))
+    throw new Error(getAuthErrorMessage(error), { cause: error })
   }
 }
 
