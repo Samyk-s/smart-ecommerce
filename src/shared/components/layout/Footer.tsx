@@ -5,7 +5,12 @@ export function Footer() {
     <footer className="border-t bg-background py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <span className="text-sm font-semibold text-foreground">SmartShop</span>
+          <Link
+            to="/"
+            className="text-sm font-extrabold tracking-tight text-[#075da4]"
+          >
+            Smart Ecommerce
+          </Link>
           <nav className="flex gap-4 text-sm text-muted-foreground">
             <Link to="/" className="transition-colors hover:text-foreground">Home</Link>
             <Link to="/cart" className="transition-colors hover:text-foreground">Cart</Link>

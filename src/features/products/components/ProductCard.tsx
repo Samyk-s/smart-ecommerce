@@ -49,13 +49,13 @@ export function ProductCard({ product, className, priority = false }: ProductCar
   return (
     <article
       className={cn(
-        'group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-card-foreground shadow-sm shadow-zinc-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/10',
+        'group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white text-card-foreground shadow-sm shadow-zinc-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-[#2d8dcc]/35 hover:shadow-xl hover:shadow-[#075da4]/10',
         className
       )}
     >
       {/* Product image */}
       <Link to={`/product/${id}`} className="relative block overflow-hidden">
-        <div className="aspect-[4/3] bg-gradient-to-br from-zinc-100 to-emerald-50">
+        <div className="aspect-[4/3] bg-gradient-to-br from-blue-50 via-white to-orange-50">
           {images[0] ? (
             <img
               src={images[0]}
@@ -96,7 +96,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       {/* Card body */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div className="flex items-center justify-between gap-2">
-          <Badge variant="outline" className="w-fit border-emerald-200 bg-emerald-50/80 capitalize text-xs text-emerald-700">
+          <Badge variant="outline" className="w-fit border-[#2d8dcc]/25 bg-blue-50/80 capitalize text-xs text-[#075da4]">
             {category}
           </Badge>
           <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
@@ -107,7 +107,7 @@ export function ProductCard({ product, className, priority = false }: ProductCar
 
         <Link
           to={`/product/${id}`}
-          className="line-clamp-2 min-h-10 text-base font-bold leading-snug text-foreground transition-colors hover:text-emerald-700"
+          className="line-clamp-2 min-h-10 text-base font-bold leading-snug text-foreground transition-colors hover:text-[#075da4]"
         >
           {name}
         </Link>

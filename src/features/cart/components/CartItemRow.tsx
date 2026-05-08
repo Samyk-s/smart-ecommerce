@@ -15,11 +15,11 @@ export function CartItemRow({ item }: CartItemRowProps) {
   const lineTotal = (product.price * quantity).toFixed(2)
 
   return (
-    <div className="flex gap-3 px-4 py-4 sm:gap-4">
+    <div className="flex gap-4 px-5 py-5 sm:gap-5 sm:px-6">
 
       {/* Product image */}
       <Link to={`/product/${product.id}`} className="shrink-0" tabIndex={-1} aria-hidden>
-        <div className="h-20 w-20 overflow-hidden rounded-lg bg-muted">
+        <div className="h-24 w-24 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-white to-orange-50 sm:h-28 sm:w-28">
           {product.images[0] ? (
             <img
               src={product.images[0]}
@@ -36,13 +36,13 @@ export function CartItemRow({ item }: CartItemRowProps) {
       </Link>
 
       {/* Details */}
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
 
         {/* Row 1: name + remove */}
         <div className="flex items-start justify-between gap-2">
           <Link
             to={`/product/${product.id}`}
-            className="line-clamp-2 text-sm font-medium leading-snug text-foreground hover:underline hover:underline-offset-2"
+            className="line-clamp-2 text-base font-bold leading-snug text-foreground transition-colors hover:text-[#075da4]"
           >
             {product.name}
           </Link>
@@ -59,10 +59,10 @@ export function CartItemRow({ item }: CartItemRowProps) {
 
         {/* Row 2: category + unit price */}
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="w-fit text-xs capitalize">
+          <Badge variant="outline" className="w-fit border-[#2d8dcc]/25 bg-blue-50/80 text-xs capitalize text-[#075da4]">
             {product.category}
           </Badge>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             ${product.price.toFixed(2)} each
           </span>
         </div>
@@ -72,7 +72,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
 
           {/* Quantity stepper */}
           <div
-            className="flex items-center rounded-lg border"
+            className="flex items-center rounded-xl border bg-white"
             role="group"
             aria-label={`Quantity for ${product.name}`}
           >
@@ -87,7 +87,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
               <Minus />
             </Button>
             <span
-              className="w-8 text-center text-sm font-medium tabular-nums"
+              className="w-10 text-center text-base font-semibold tabular-nums"
               aria-live="polite"
               aria-atomic
             >
@@ -105,7 +105,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
           </div>
 
           {/* Line total */}
-          <span className="text-sm font-semibold tabular-nums text-foreground">
+          <span className="text-lg font-extrabold tabular-nums text-foreground">
             ${lineTotal}
           </span>
         </div>

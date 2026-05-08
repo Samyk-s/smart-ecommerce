@@ -23,8 +23,11 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-5">
 
         {/* Brand */}
-        <Link to="/" className="text-2xl font-extrabold tracking-tight text-foreground">
-          SmartShop
+        <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-tight text-[#075da4]"
+        >
+          Smart Ecommerce
         </Link>
 
         {/* Nav */}

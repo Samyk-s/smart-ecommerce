@@ -5,7 +5,7 @@ import { dismissToast, useToast, type ToastMessage } from '@/shared/hooks/use-to
 
 const variantClasses: Record<NonNullable<ToastMessage['variant']>, string> = {
   default: 'border-zinc-200 bg-white text-zinc-950',
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-950',
+  success: 'border-[#2d8dcc]/25 bg-blue-50 text-[#075da4]',
   destructive: 'border-red-200 bg-red-50 text-red-950',
 }
 
@@ -47,7 +47,7 @@ export function Toaster() {
 
 function ToastIcon({ variant = 'default' }: Pick<ToastMessage, 'variant'>) {
   if (variant === 'success') {
-    return <CheckCircle2 className="mt-0.5 size-5 text-emerald-600" />
+    return <CheckCircle2 className="mt-0.5 size-5 text-[#075da4]" />
   }
 
   if (variant === 'destructive') {

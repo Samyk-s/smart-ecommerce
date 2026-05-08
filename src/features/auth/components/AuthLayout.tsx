@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { ShieldCheck, ShoppingBag, Sparkles } from 'lucide-react'
+import { ArrowLeft, ShoppingBag, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 interface AuthLayoutProps {
@@ -11,112 +11,82 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#dcfce7,transparent_32%),linear-gradient(135deg,#f8fafc_0%,#ecfeff_45%,#fff7ed_100%)] px-4 py-8">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] bg-[size:44px_44px] opacity-30" />
-
-      <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <motion.section
-          initial={{ opacity: 0, x: -28 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.55, ease: 'easeOut' }}
-          className="hidden lg:block"
-        >
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-lg font-extrabold tracking-tight text-zinc-950"
-          >
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-zinc-950/15">
-              <ShoppingBag className="size-5" />
-            </span>
-            SmartShop
-          </Link>
-
-          <div className="mt-14 max-w-xl">
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.12, duration: 0.5, ease: 'easeOut' }}
-              className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/70 px-3 py-1 text-sm font-medium text-emerald-700 shadow-sm backdrop-blur"
-            >
-              <Sparkles className="size-4" />
-              Curated shopping, faster checkout
-            </motion.div>
-
-            <h1 className="bg-gradient-to-r from-zinc-950 via-zinc-700 to-emerald-600 bg-clip-text text-6xl font-extrabold leading-tight tracking-tight text-transparent">
-              Sign in and keep your cart close.
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-zinc-600">
-              Access your saved cart, continue shopping, and move through checkout with a cleaner SmartShop experience.
+    <main className="min-h-screen bg-[linear-gradient(135deg,#f8fbff_0%,#eef8ff_48%,#fff7ed_100%)] px-4 py-8">
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-2xl shadow-[#075da4]/10 lg:grid-cols-[1.1fr_0.9fr]"
+      >
+        <div className="relative hidden min-h-full overflow-hidden lg:block">
+          <img
+            src="/images/loginbg.jpg"
+            alt="Customer shopping online"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/10" />
+          <div className="absolute inset-x-0 bottom-0 p-12 text-white">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-2 text-sm font-semibold backdrop-blur">
+              <Sparkles className="size-4 text-[#f7941d]" />
+              Smart shopping experience
+            </div>
+            <h2 className="max-w-lg text-5xl font-extrabold leading-tight tracking-tight">
+              Start your journey now
+            </h2>
+            <p className="mt-4 max-w-md text-base leading-7 text-white/80">
+              Sign in to save your cart, continue shopping, and move faster through checkout.
             </p>
           </div>
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.24, duration: 0.55, ease: 'easeOut' }}
-            className="mt-12 grid max-w-lg grid-cols-2 gap-4"
-          >
-            <div className="rounded-2xl border border-white/70 bg-white/75 p-5 shadow-lg shadow-zinc-950/5 backdrop-blur">
-              <ShieldCheck className="mb-4 size-7 text-emerald-600" />
-              <p className="text-sm font-semibold text-zinc-950">Secure access</p>
-              <p className="mt-1 text-sm leading-6 text-zinc-600">
-                Firebase auth keeps account flows simple and reliable.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-white/70 bg-zinc-950 p-5 text-white shadow-lg shadow-zinc-950/15">
-              <ShoppingBag className="mb-4 size-7 text-emerald-300" />
-              <p className="text-sm font-semibold">Cart ready</p>
-              <p className="mt-1 text-sm leading-6 text-white/70">
-                Sign in to add items and keep shopping without losing context.
-              </p>
-            </div>
-          </motion.div>
-        </motion.section>
+        <div className="flex flex-col px-6 py-6 sm:px-10 lg:px-12">
+          <div className="mb-8 flex items-center justify-between">
+            <Link
+              to="/"
+              aria-label="Back to home"
+              className="flex size-9 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 transition-colors hover:border-[#2d8dcc]/40 hover:text-[#075da4]"
+            >
+              <ArrowLeft className="size-4" />
+            </Link>
 
-        <motion.section
-          initial={{ opacity: 0, y: 26, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="mx-auto w-full max-w-md"
-        >
-          <Link
-            to="/"
-            className="mx-auto mb-8 flex w-fit items-center gap-2 text-lg font-extrabold tracking-tight text-zinc-950 lg:hidden"
-          >
-            <span className="flex size-10 items-center justify-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-zinc-950/15">
-              <ShoppingBag className="size-5" />
-            </span>
-            SmartShop
-          </Link>
+            <Link
+              to="/"
+              className="text-lg font-extrabold tracking-tight text-[#075da4]"
+            >
+              Smart Ecommerce
+            </Link>
+          </div>
 
-          <div className="rounded-3xl border border-white/70 bg-white/85 p-6 shadow-2xl shadow-zinc-950/10 backdrop-blur-xl sm:p-8">
-            <div className="mb-7 text-center">
-              <motion.div
-                initial={{ rotate: -8, scale: 0.9 }}
-                animate={{ rotate: 0, scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 180, damping: 14 }}
-                className="mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-zinc-950 to-emerald-600 text-white shadow-lg shadow-emerald-900/20"
-              >
-                <ShoppingBag className="size-7" />
-              </motion.div>
-              <h2 className="text-3xl font-extrabold tracking-tight text-zinc-950">
-                {title}
-              </h2>
-              {subtitle && (
-                <p className="mt-2 text-sm leading-6 text-zinc-500">{subtitle}</p>
-              )}
-            </div>
-
+          <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.14, duration: 0.4, ease: 'easeOut' }}
+              transition={{ delay: 0.1, duration: 0.42, ease: 'easeOut' }}
+              className="mb-7"
+            >
+              <div className="mb-4 flex size-13 items-center justify-center rounded-2xl bg-gradient-to-br from-[#075da4] to-[#f7941d] text-white shadow-lg shadow-[#075da4]/20">
+                <ShoppingBag className="size-6" />
+              </div>
+              <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950">
+                {title}
+              </h1>
+              {subtitle && (
+                <p className="mt-3 text-base leading-7 text-zinc-500">
+                  {subtitle}
+                </p>
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, duration: 0.42, ease: 'easeOut' }}
             >
               {children}
             </motion.div>
           </div>
-        </motion.section>
-      </div>
+        </div>
+      </motion.section>
     </main>
   )
 }

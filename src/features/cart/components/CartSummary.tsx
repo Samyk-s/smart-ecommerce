@@ -17,26 +17,26 @@ export function CartSummary() {
   const total = subtotal + shipping
 
   return (
-    <div className="rounded-xl border bg-card p-5">
-      <h2 className="mb-4 text-base font-semibold text-foreground">Order Summary</h2>
+    <div className="rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-xl shadow-zinc-950/5">
+      <h2 className="mb-5 text-xl font-extrabold tracking-tight text-foreground">Order Summary</h2>
 
       {/* Line items */}
-      <dl className="flex flex-col gap-2.5 text-sm">
+      <dl className="flex flex-col gap-3 text-base">
         <div className="flex items-center justify-between">
           <dt className="text-muted-foreground">
             Subtotal
-            <span className="ml-1 text-xs">
+            <span className="ml-1 text-sm">
               ({totalItems} {totalItems === 1 ? 'item' : 'items'})
             </span>
           </dt>
-          <dd className="font-medium tabular-nums text-foreground">
+          <dd className="font-semibold tabular-nums text-foreground">
             ${subtotal.toFixed(2)}
           </dd>
         </div>
 
         <div className="flex items-center justify-between">
           <dt className="text-muted-foreground">Shipping</dt>
-          <dd className="font-medium text-green-600 dark:text-green-400">
+          <dd className="font-semibold text-[#075da4]">
             {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
           </dd>
         </div>
@@ -44,14 +44,14 @@ export function CartSummary() {
         {/* Total */}
         <div className="flex items-center justify-between border-t pt-3">
           <dt className="font-semibold text-foreground">Total</dt>
-          <dd className="text-base font-bold tabular-nums text-foreground">
+          <dd className="text-xl font-extrabold tabular-nums text-foreground">
             ${total.toFixed(2)}
           </dd>
         </div>
       </dl>
 
       {/* Checkout CTA */}
-      <Button className="mt-5 w-full gap-2" size="sm">
+      <Button className="mt-6 h-11 w-full gap-2 bg-black text-base font-semibold text-white hover:bg-black/85" size="lg">
         <ShoppingBag />
         Proceed to Checkout
       </Button>
@@ -59,8 +59,8 @@ export function CartSummary() {
       {/* Secondary actions */}
       <Button
         variant="ghost"
-        size="sm"
-        className="mt-2 w-full text-muted-foreground hover:text-destructive"
+        size="lg"
+        className="mt-2 h-11 w-full text-base text-muted-foreground hover:text-destructive"
         onClick={clearCart}
       >
         Clear cart
@@ -69,7 +69,7 @@ export function CartSummary() {
       <div className="mt-4 border-t pt-4 text-center">
         <Link
           to="/"
-          className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
         >
           ← Continue shopping
         </Link>

@@ -25,7 +25,7 @@ export function ProductDetailPage() {
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_34%,#f6fef9_100%)] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
+      <main className="min-h-screen bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_34%,#fff7ed_100%)] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
         <div className="mx-auto flex min-h-[50vh] max-w-xl flex-col items-center justify-center gap-4 text-center">
           <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
             Product not found
@@ -70,7 +70,7 @@ export function ProductDetailPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_34%,#f6fef9_100%)] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
+    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_34%,#fff7ed_100%)] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
       <div className="mx-auto max-w-5xl">
         <Button asChild variant="ghost" className="mb-8 text-base font-semibold">
           <Link to="/">
@@ -81,7 +81,7 @@ export function ProductDetailPage() {
 
         <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(380px,460px)]">
           <div className="overflow-hidden rounded-3xl border border-zinc-200/80 bg-white p-3 shadow-xl shadow-zinc-950/8">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-100 to-emerald-50">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50 via-white to-orange-50">
               {product.images[0] ? (
                 <img
                   src={product.images[0]}
@@ -112,7 +112,7 @@ export function ProductDetailPage() {
 
           <div className="rounded-3xl border border-zinc-200/80 bg-white/90 p-6 shadow-xl shadow-zinc-950/8 backdrop-blur sm:p-8">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">
+              <Badge variant="outline" className="border-[#2d8dcc]/25 bg-blue-50 text-[#075da4]">
                 {product.category}
               </Badge>
               {isOutOfStock ? (
@@ -154,7 +154,7 @@ export function ProductDetailPage() {
                   </span>
                 )}
               </div>
-              <div className="mt-3 flex items-center gap-2 text-sm font-medium text-emerald-700">
+              <div className="mt-3 flex items-center gap-2 text-sm font-medium text-[#075da4]">
                 <CheckCircle2 className="size-4" />
                 Free shipping on this product
               </div>
@@ -162,7 +162,7 @@ export function ProductDetailPage() {
 
             <div className="mt-6 flex flex-wrap gap-2">
               {product.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="bg-emerald-50 text-emerald-700">
+                <Badge key={tag} variant="secondary" className="bg-blue-50 text-[#075da4]">
                   <Tag />
                   {tag}
                 </Badge>
