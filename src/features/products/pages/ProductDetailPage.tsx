@@ -2,21 +2,26 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
   CheckCircle2,
+  Minus,
   PackageCheck,
+  Plus,
   ShoppingCart,
   Star,
   Tag,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/lib/utils'
 import { toast } from '@/shared/hooks/use-toast'
 import { useAuthStore } from '@/shared/stores/authStore'
 import { useCartStore } from '@/shared/stores/cartStore'
+import { ProductCard } from '@/features/products/components/ProductCard'
 import { MOCK_PRODUCTS } from '@/features/products/data/mockProducts'
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const [quantity, setQuantity] = useState(1)
   const user = useAuthStore((state) => state.user)
   const addItem = useCartStore((state) => state.addItem)
   const location = useLocation()
@@ -48,6 +53,11 @@ export function ProductDetailPage() {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null
   const isOutOfStock = product.stock === 0
+  const similarProducts = MOCK_PRODUCTS.filter(
+    (item) => item.id !== product.id && item.category === product.category
+  ).slice(0, 3)
+  const decreaseQuantity = () => setQuantity((value) => Math.max(1, value - 1))
+  const increaseQuantity = () => setQuantity((value) => Math.min(product.stock, value + 1))
 
   const handleAddToCart = () => {
     if (!user) {
@@ -61,10 +71,10 @@ export function ProductDetailPage() {
       return
     }
 
-    addItem(product)
+    addItem(product, quantity)
     toast({
       title: 'Added to cart',
-      description: `${product.name} is now in your cart.`,
+      description: `${quantity} ${quantity === 1 ? 'item' : 'items'} of ${product.name} added to your cart.`,
       variant: 'success',
     })
   }
@@ -169,15 +179,47 @@ export function ProductDetailPage() {
               ))}
             </div>
 
-            <Button
-              size="lg"
-              disabled={isOutOfStock}
-              onClick={handleAddToCart}
-              className="mt-8 h-12 w-full rounded-xl bg-black text-base font-semibold text-white shadow-lg shadow-zinc-950/15 hover:bg-black/85"
-            >
-              <ShoppingCart />
-              Add to cart
-            </Button>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div
+                className="flex h-12 items-center justify-center rounded-xl border border-zinc-200 bg-white"
+                role="group"
+                aria-label={`Quantity for ${product.name}`}
+              >
+                <Button
+                  variant="ghost"
+                  size="icon-lg"
+                  aria-label="Decrease quantity"
+                  disabled={quantity <= 1 || isOutOfStock}
+                  onClick={decreaseQuantity}
+                  className="rounded-r-none border-r"
+                >
+                  <Minus />
+                </Button>
+                <span className="w-14 text-center text-lg font-extrabold tabular-nums">
+                  {quantity}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon-lg"
+                  aria-label="Increase quantity"
+                  disabled={quantity >= product.stock || isOutOfStock}
+                  onClick={increaseQuantity}
+                  className="rounded-l-none border-l"
+                >
+                  <Plus />
+                </Button>
+              </div>
+
+              <Button
+                size="lg"
+                disabled={isOutOfStock}
+                onClick={handleAddToCart}
+                className="h-12 flex-1 rounded-xl bg-black text-base font-semibold text-white shadow-lg shadow-zinc-950/15 hover:bg-black/85"
+              >
+                <ShoppingCart />
+                Add {quantity} to cart
+              </Button>
+            </div>
 
             {!user && (
               <p className="mt-3 text-center text-sm text-muted-foreground">
@@ -186,6 +228,29 @@ export function ProductDetailPage() {
             )}
           </div>
         </section>
+
+        {similarProducts.length > 0 && (
+          <section className="mt-14">
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#075da4]">
+                  You may also like
+                </p>
+                <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">
+                  Similar products
+                </h2>
+              </div>
+              <Button asChild variant="outline">
+                <Link to="/">View all</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {similarProducts.map((similarProduct) => (
+                <ProductCard key={similarProduct.id} product={similarProduct} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )

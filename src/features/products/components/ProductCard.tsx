@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Star, TrendingUp } from 'lucide-react'
+import { Minus, Plus, ShoppingCart, Star, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
@@ -16,6 +17,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const { id, name, price, originalPrice, images, category, rating, stock } = product
+  const [quantity, setQuantity] = useState(1)
   const user = useAuthStore((state) => state.user)
   const addItem = useCartStore((state) => state.addItem)
   const location = useLocation()
@@ -26,6 +28,8 @@ export function ProductCard({ product, className, priority = false }: ProductCar
     : null
 
   const isOutOfStock = stock === 0
+  const decreaseQuantity = () => setQuantity((value) => Math.max(1, value - 1))
+  const increaseQuantity = () => setQuantity((value) => Math.min(stock, value + 1))
   const handleAddToCart = () => {
     if (!user) {
       toast({
@@ -38,10 +42,10 @@ export function ProductCard({ product, className, priority = false }: ProductCar
       return
     }
 
-    addItem(product)
+    addItem(product, quantity)
     toast({
       title: 'Added to cart',
-      description: `${name} is now in your cart.`,
+      description: `${quantity} ${quantity === 1 ? 'item' : 'items'} of ${name} added to your cart.`,
       variant: 'success',
     })
   }
@@ -132,16 +136,48 @@ export function ProductCard({ product, className, priority = false }: ProductCar
             )}
           </div>
 
-          <Button
-            size="default"
-            aria-label={`Add ${name} to cart`}
-            disabled={isOutOfStock}
-            onClick={handleAddToCart}
-            className="h-10 w-full rounded-xl bg-black text-sm font-semibold text-white shadow-sm shadow-zinc-950/15 hover:bg-black/85"
-          >
-            <ShoppingCart />
-            Add to cart
-          </Button>
+          <div className="flex items-center gap-2">
+            <div
+              className="flex h-10 items-center rounded-xl border border-zinc-200 bg-white"
+              role="group"
+              aria-label={`Quantity for ${name}`}
+            >
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Decrease quantity"
+                disabled={quantity <= 1 || isOutOfStock}
+                onClick={decreaseQuantity}
+                className="rounded-r-none border-r"
+              >
+                <Minus />
+              </Button>
+              <span className="w-9 text-center text-sm font-bold tabular-nums">
+                {quantity}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Increase quantity"
+                disabled={quantity >= stock || isOutOfStock}
+                onClick={increaseQuantity}
+                className="rounded-l-none border-l"
+              >
+                <Plus />
+              </Button>
+            </div>
+
+            <Button
+              size="default"
+              aria-label={`Add ${quantity} ${name} to cart`}
+              disabled={isOutOfStock}
+              onClick={handleAddToCart}
+              className="h-10 flex-1 rounded-xl bg-black text-sm font-semibold text-white shadow-sm shadow-zinc-950/15 hover:bg-black/85"
+            >
+              <ShoppingCart />
+              Add
+            </Button>
+          </div>
         </div>
       </div>
     </article>
