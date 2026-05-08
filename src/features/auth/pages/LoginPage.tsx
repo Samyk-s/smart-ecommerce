@@ -1,26 +1,42 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
+import { useAuthStore } from '@/shared/stores/authStore'
 
 export function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  // These state variables will be replaced by react-hook-form + Zustand in Phase 3
-  const isLoading = false
-  const error: string | null = null
+  const { login, status, error, clearError } = useAuthStore()
+  const navigate = useNavigate()
+
+  const isLoading = status === 'loading'
+
+  // Redirect to home on successful authentication
+  useEffect(() => {
+    if (status === 'authenticated') {
+      navigate('/', { replace: true })
+    }
+  }, [status, navigate])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await login({ email, password })
+  }
 
   return (
     <AuthLayout
       title="Welcome back"
       subtitle="Sign in to your SmartShop account"
     >
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 
-        {/* Global error banner */}
+        {/* Server / store error */}
         {error && (
           <div
             role="alert"
@@ -40,6 +56,11 @@ export function LoginPage() {
             autoComplete="email"
             disabled={isLoading}
             required
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (error) clearError()
+            }}
           />
         </div>
 
@@ -63,6 +84,11 @@ export function LoginPage() {
               disabled={isLoading}
               required
               className="pr-9"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                if (error) clearError()
+              }}
             />
             <button
               type="button"
@@ -100,7 +126,6 @@ export function LoginPage() {
         </div>
       </div>
 
-      {/* Sign up link */}
       <Button asChild variant="outline" size="sm" className="w-full">
         <Link to="/auth/signup">Create account</Link>
       </Button>

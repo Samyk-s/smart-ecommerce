@@ -1,26 +1,30 @@
-import { Link, NavLink } from 'react-router-dom'
-import { ShoppingCart } from 'lucide-react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { LogOut, ShoppingCart } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { cn } from '@/shared/lib/utils'
-
-// Cart count + auth state will be wired to Zustand stores in Phase 3 & 5
-const CART_COUNT = 0
-const IS_AUTHED = false
+import { useAuthStore } from '@/shared/stores/authStore'
+import { useCartStore, selectTotalItems } from '@/shared/stores/cartStore'
 
 export function Navbar() {
+  const { user, logout } = useAuthStore()
+  const cartCount = useCartStore(selectTotalItems)
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
 
-        {/* Logo */}
-        <Link
-          to="/"
-          className="text-lg font-bold tracking-tight text-foreground"
-        >
+        {/* Brand */}
+        <Link to="/" className="text-lg font-bold tracking-tight text-foreground">
           SmartShop
         </Link>
 
-        {/* Nav links + actions */}
+        {/* Nav */}
         <nav className="flex items-center gap-1">
           <NavLink
             to="/"
@@ -37,29 +41,44 @@ export function Navbar() {
             Home
           </NavLink>
 
-          {/* Cart icon button with count badge */}
+          {/* Cart icon — badge shows real count from cartStore */}
           <Link to="/cart" className="relative ml-1">
-            <Button variant="ghost" size="icon" aria-label="Cart">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={`Cart, ${cartCount} item${cartCount !== 1 ? 's' : ''}`}
+            >
               <ShoppingCart />
-              {CART_COUNT > 0 && (
+              {cartCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                  {CART_COUNT > 9 ? '9+' : CART_COUNT}
+                  {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
             </Button>
           </Link>
 
-          {/* Auth button — swapped for user menu in Phase 3 */}
-          {IS_AUTHED ? (
-            <Button variant="ghost" size="sm" className="ml-1">
-              Sign out
-            </Button>
+          {/* Auth — shows user name + logout when authenticated */}
+          {user ? (
+            <div className="ml-1 flex items-center gap-2">
+              <span className="hidden max-w-30 truncate text-sm text-muted-foreground sm:block">
+                {user.displayName ?? user.email}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Sign out"
+                onClick={handleLogout}
+              >
+                <LogOut className="size-4" />
+              </Button>
+            </div>
           ) : (
             <Button asChild size="sm" className="ml-1">
               <Link to="/auth/login">Sign in</Link>
             </Button>
           )}
         </nav>
+
       </div>
     </header>
   )

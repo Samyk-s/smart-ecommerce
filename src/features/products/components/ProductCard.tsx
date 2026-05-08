@@ -3,16 +3,17 @@ import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { cn } from '@/shared/lib/utils'
+import { useCartStore } from '@/shared/stores/cartStore'
 import type { Product } from '@/shared/types'
 
 interface ProductCardProps {
   product: Product
-  onAddToCart?: (product: Product) => void
   className?: string
 }
 
-export function ProductCard({ product, onAddToCart, className }: ProductCardProps) {
+export function ProductCard({ product, className }: ProductCardProps) {
   const { id, name, price, originalPrice, images, category, rating, stock } = product
+  const addItem = useCartStore((state) => state.addItem)
 
   const discount = originalPrice
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
@@ -61,12 +62,10 @@ export function ProductCard({ product, onAddToCart, className }: ProductCardProp
 
       {/* Card body */}
       <div className="flex flex-1 flex-col gap-3 p-3">
-        {/* Category */}
         <Badge variant="outline" className="w-fit capitalize text-xs">
           {category}
         </Badge>
 
-        {/* Name */}
         <Link
           to={`/product/${id}`}
           className="line-clamp-2 text-sm font-medium leading-snug text-foreground hover:underline hover:underline-offset-2"
@@ -74,7 +73,6 @@ export function ProductCard({ product, onAddToCart, className }: ProductCardProp
           {name}
         </Link>
 
-        {/* Rating */}
         <div className="flex items-center gap-1.5">
           <StarRating value={rating.average} />
           <span className="text-xs text-muted-foreground">
@@ -82,7 +80,7 @@ export function ProductCard({ product, onAddToCart, className }: ProductCardProp
           </span>
         </div>
 
-        {/* Price row */}
+        {/* Price + Add to Cart */}
         <div className="mt-auto flex items-end justify-between gap-2">
           <div className="flex items-baseline gap-1.5">
             <span className="text-base font-bold text-foreground">
@@ -100,7 +98,7 @@ export function ProductCard({ product, onAddToCart, className }: ProductCardProp
             variant="outline"
             aria-label={`Add ${name} to cart`}
             disabled={isOutOfStock}
-            onClick={() => onAddToCart?.(product)}
+            onClick={() => addItem(product)}
             className="shrink-0"
           >
             <ShoppingCart />

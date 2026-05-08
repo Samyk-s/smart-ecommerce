@@ -1,37 +1,65 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
+import { useAuthStore } from '@/shared/stores/authStore'
 
 export function SignupPage() {
+  const [displayName, setDisplayName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+  // Client-side validation errors (password mismatch, etc.)
+  const [localError, setLocalError] = useState<string | null>(null)
 
-  // Will be replaced by react-hook-form + Zustand in Phase 3
-  const isLoading = false
-  const error: string | null = null
+  const { signup, status, error, clearError } = useAuthStore()
+  const navigate = useNavigate()
+
+  const isLoading = status === 'loading'
+  const displayedError = localError ?? error
+
+  // Redirect to home on successful authentication
+  useEffect(() => {
+    if (status === 'authenticated') {
+      navigate('/', { replace: true })
+    }
+  }, [status, navigate])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLocalError(null)
+
+    if (password !== confirmPassword) {
+      setLocalError('Passwords do not match.')
+      return
+    }
+
+    await signup({ email, password, displayName })
+  }
 
   return (
     <AuthLayout
       title="Create account"
       subtitle="Start shopping with SmartShop today"
     >
-      <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 
-        {/* Global error banner */}
-        {error && (
+        {/* Error banner — shows both client-side and store errors */}
+        {displayedError && (
           <div
             role="alert"
             className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
           >
-            {error}
+            {displayedError}
           </div>
         )}
 
-        {/* Display name */}
+        {/* Full name */}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="displayName">Full name</Label>
           <Input
@@ -41,6 +69,8 @@ export function SignupPage() {
             autoComplete="name"
             disabled={isLoading}
             required
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
           />
         </div>
 
@@ -54,6 +84,11 @@ export function SignupPage() {
             autoComplete="email"
             disabled={isLoading}
             required
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (error) clearError()
+            }}
           />
         </div>
 
@@ -69,6 +104,11 @@ export function SignupPage() {
               disabled={isLoading}
               required
               className="pr-9"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                setLocalError(null)
+              }}
             />
             <button
               type="button"
@@ -93,6 +133,11 @@ export function SignupPage() {
               disabled={isLoading}
               required
               className="pr-9"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value)
+                setLocalError(null)
+              }}
             />
             <button
               type="button"
@@ -117,7 +162,6 @@ export function SignupPage() {
           )}
         </Button>
 
-        {/* Terms note */}
         <p className="text-center text-xs text-muted-foreground">
           By creating an account you agree to our{' '}
           <span className="underline underline-offset-4 cursor-pointer hover:text-foreground">
@@ -139,7 +183,6 @@ export function SignupPage() {
         </div>
       </div>
 
-      {/* Sign in link */}
       <Button asChild variant="outline" size="sm" className="w-full">
         <Link to="/auth/login">Sign in</Link>
       </Button>
