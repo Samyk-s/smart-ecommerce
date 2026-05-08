@@ -1,0 +1,150 @@
+[
+  {
+    "id": "p1",
+    "name": "Urban Roll-Top Backpack",
+    "description": "Durable everyday backpack with a roll-top closure, laptop sleeve, and roomy storage for work or travel.",
+    "price": 59.99,
+    "originalPrice": 79.99,
+    "images": ["/images/bag1.jpg"],
+    "category": "Accessories",
+    "rating": { "average": 4.6, "count": 842 },
+    "stock": 24,
+    "tags": ["backpack", "travel", "work"]
+  },
+  {
+    "id": "p2",
+    "name": "Canvas Daypack",
+    "description": "Lightweight canvas backpack with a clean profile, padded straps, and quick-access front pocket.",
+    "price": 44.99,
+    "images": ["/images/bag2.jpg"],
+    "category": "Accessories",
+    "rating": { "average": 4.4, "count": 519 },
+    "stock": 31,
+    "tags": ["bag", "canvas", "daily"]
+  },
+  {
+    "id": "p3",
+    "name": "Compact Travel Bag",
+    "description": "A compact carry bag made for short trips, gym sessions, and organized daily essentials.",
+    "price": 39.99,
+    "images": ["/images/bag3.jpg"],
+    "category": "Accessories",
+    "rating": { "average": 4.3, "count": 287 },
+    "stock": 18,
+    "tags": ["travel", "compact", "bag"]
+  },
+  {
+    "id": "p4",
+    "name": "Signature Coffee Blend",
+    "description": "A balanced medium roast coffee blend with smooth chocolate notes and a clean finish.",
+    "price": 16.99,
+    "originalPrice": 21.99,
+    "images": ["/images/coffee1.jpg"],
+    "category": "Grocery",
+    "rating": { "average": 4.8, "count": 1320 },
+    "stock": 64,
+    "tags": ["coffee", "medium-roast", "pantry"]
+  },
+  {
+    "id": "p5",
+    "name": "Dark Roast Coffee Beans",
+    "description": "Rich dark roast whole beans with bold aroma, low acidity, and a deep roasted flavor.",
+    "price": 18.99,
+    "images": ["/images/coffee2.jpg"],
+    "category": "Grocery",
+    "rating": { "average": 4.7, "count": 904 },
+    "stock": 47,
+    "tags": ["coffee", "dark-roast", "beans"]
+  },
+  {
+    "id": "p6",
+    "name": "Cold Brew Coffee Pack",
+    "description": "Ready-to-brew cold brew coffee pack designed for a smooth, refreshing cup at home.",
+    "price": 14.99,
+    "images": ["/images/coffee3.jpg"],
+    "category": "Grocery",
+    "rating": { "average": 4.5, "count": 611 },
+    "stock": 55,
+    "tags": ["coffee", "cold-brew", "refreshing"]
+  },
+  {
+    "id": "p7",
+    "name": "Classic Fleece Hoodie",
+    "description": "Soft fleece hoodie with a relaxed fit, kangaroo pocket, and everyday comfort.",
+    "price": 49.99,
+    "originalPrice": 69.99,
+    "images": ["/images/hoodie1.jpg"],
+    "category": "Clothing",
+    "rating": { "average": 4.6, "count": 735 },
+    "stock": 22,
+    "tags": ["hoodie", "fleece", "casual"]
+  },
+  {
+    "id": "p8",
+    "name": "Eau de Parfum",
+    "description": "Elegant fragrance with warm woods, soft citrus, and a long-lasting refined finish.",
+    "price": 89.99,
+    "images": ["/images/perfume1.jpg"],
+    "category": "Beauty",
+    "rating": { "average": 4.5, "count": 456 },
+    "stock": 15,
+    "tags": ["perfume", "fragrance", "beauty"]
+  },
+  {
+    "id": "p9",
+    "name": "Lightweight Running Shoes",
+    "description": "Breathable running shoes with cushioned support for workouts, walks, and everyday wear.",
+    "price": 84.99,
+    "originalPrice": 109.99,
+    "images": ["/images/shoes1.jpg"],
+    "category": "Footwear",
+    "rating": { "average": 4.4, "count": 876 },
+    "stock": 40,
+    "tags": ["shoes", "running", "sport"]
+  },
+  {
+    "id": "p10",
+    "name": "Aviator Sunglasses",
+    "description": "Timeless aviator sunglasses with tinted lenses and a lightweight metal frame.",
+    "price": 29.99,
+    "images": ["/images/sunglass1.jpg"],
+    "category": "Accessories",
+    "rating": { "average": 4.2, "count": 391 },
+    "stock": 29,
+    "tags": ["sunglasses", "aviator", "summer"]
+  },
+  {
+    "id": "p11",
+    "name": "Square Frame Sunglasses",
+    "description": "Modern square sunglasses with UV protection and a bold frame for daily styling.",
+    "price": 34.99,
+    "images": ["/images/sunglass2.jpg"],
+    "category": "Accessories",
+    "rating": { "average": 4.3, "count": 268 },
+    "stock": 26,
+    "tags": ["sunglasses", "uv", "style"]
+  },
+  {
+    "id": "p12",
+    "name": "Minimal Analog Watch",
+    "description": "Clean analog watch with a slim case, comfortable strap, and versatile everyday design.",
+    "price": 119.99,
+    "originalPrice": 149.99,
+    "images": ["/images/watch1.jpg"],
+    "category": "Watches",
+    "rating": { "average": 4.7, "count": 1028 },
+    "stock": 12,
+    "tags": ["watch", "analog", "minimal"]
+  },
+  {
+    "id": "p13",
+    "name": "Sport Chronograph Watch",
+    "description": "Sport-inspired chronograph watch with durable construction and a polished everyday look.",
+    "price": 139.99,
+    "images": ["/images/watch2.jpg"],
+    "category": "Watches",
+    "rating": { "average": 4.5, "count": 673 },
+    "stock": 9,
+    "tags": ["watch", "chronograph", "sport"]
+  }
+]
