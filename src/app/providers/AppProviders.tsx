@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { AuthListener } from '@/features/auth/components/AuthListener'
 
 interface AppProvidersProps {
   children: ReactNode
@@ -9,5 +10,5 @@ interface AppProvidersProps {
  * Add ThemeProvider, AuthListener, QueryClientProvider, etc. here as features are built.
  */
 export function AppProviders({ children }: AppProvidersProps) {
-  return <>{children}</>
+  return <AuthListener>{children}</AuthListener>
 }

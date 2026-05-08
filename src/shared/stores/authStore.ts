@@ -1,7 +1,6 @@
 import { create } from 'zustand'
+import { authService } from '@/features/auth/services/authService'
 import type { User, LoginCredentials, SignupData } from '@/shared/types'
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 type AuthStatus = 'idle' | 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -10,16 +9,15 @@ interface AuthState {
   status: AuthStatus
   error: string | null
   login: (credentials: LoginCredentials) => Promise<void>
+  loginWithGoogle: () => Promise<void>
   signup: (data: SignupData) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
+  forgotPassword: (email: string) => Promise<void>
+  resetPassword: (code: string, password: string) => Promise<void>
+  verifyResetCode: (code: string) => Promise<string>
+  setUser: (user: User | null) => void
   clearError: () => void
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
-
-// ─── Store ────────────────────────────────────────────────────────────────────
 
 export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
@@ -29,60 +27,114 @@ export const useAuthStore = create<AuthState>()((set) => ({
   login: async ({ email, password }) => {
     set({ status: 'loading', error: null })
     try {
-      await delay(800)
-
-      // Mock validation — swap this block for a Firebase call in a later phase
-      if (!email || password.length < 6) {
-        throw new Error('Invalid email or password.')
-      }
-
-      const user: User = {
-        id: 'mock-user-id',
-        email,
-        displayName: email.split('@')[0],
-        photoURL: null,
-        createdAt: new Date().toISOString(),
-      }
-
+      const user = await authService.login(email.trim(), password)
       set({ user, status: 'authenticated', error: null })
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Login failed. Please try again.'
-      set({ status: 'unauthenticated', error: message })
+      set({ user: null, status: 'unauthenticated', error: message })
+    }
+  },
+
+  loginWithGoogle: async () => {
+    set({ status: 'loading', error: null })
+    try {
+      const user = await authService.loginWithGoogle()
+      set({ user, status: 'authenticated', error: null })
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Google sign-in failed. Please try again.'
+      set({ user: null, status: 'unauthenticated', error: message })
     }
   },
 
   signup: async ({ email, password, displayName }) => {
     set({ status: 'loading', error: null })
     try {
-      await delay(800)
-
-      // Mock validation — swap this block for a Firebase call in a later phase
-      if (!email || !displayName.trim()) {
+      const trimmedName = displayName.trim()
+      if (!email.trim() || !trimmedName) {
         throw new Error('All fields are required.')
       }
-      if (password.length < 8) {
-        throw new Error('Password must be at least 8 characters.')
-      }
 
-      const user: User = {
-        id: `mock-${Date.now()}`,
-        email,
-        displayName: displayName.trim(),
-        photoURL: null,
-        createdAt: new Date().toISOString(),
-      }
-
+      await authService.signup(email.trim(), password)
+      const user = await authService.updateDisplayName(trimmedName)
       set({ user, status: 'authenticated', error: null })
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Signup failed. Please try again.'
-      set({ status: 'unauthenticated', error: message })
+      set({ user: null, status: 'unauthenticated', error: message })
     }
   },
 
-  logout: () => {
-    set({ user: null, status: 'unauthenticated', error: null })
+  logout: async () => {
+    set({ status: 'loading', error: null })
+    try {
+      await authService.logout()
+      set({ user: null, status: 'unauthenticated', error: null })
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Logout failed. Please try again.'
+      set((state) => ({
+        status: state.user ? 'authenticated' : 'unauthenticated',
+        error: message,
+      }))
+    }
+  },
+
+  forgotPassword: async (email) => {
+    set({ status: 'loading', error: null })
+    try {
+      await authService.forgotPassword(email.trim())
+      set((state) => ({
+        status: state.user ? 'authenticated' : 'unauthenticated',
+        error: null,
+      }))
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Could not send reset email. Please try again.'
+      set((state) => ({
+        status: state.user ? 'authenticated' : 'unauthenticated',
+        error: message,
+      }))
+    }
+  },
+
+  resetPassword: async (code, password) => {
+    set({ status: 'loading', error: null })
+    try {
+      await authService.resetPassword(code, password)
+      set({ user: null, status: 'unauthenticated', error: null })
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Could not reset password. Please try again.'
+      set({ user: null, status: 'unauthenticated', error: message })
+    }
+  },
+
+  verifyResetCode: async (code) => {
+    set({ error: null })
+    try {
+      return await authService.verifyResetCode(code)
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'This reset link is invalid.'
+      set({ error: message })
+      throw err
+    }
+  },
+
+  setUser: (user) => {
+    set({
+      user,
+      status: user ? 'authenticated' : 'unauthenticated',
+      error: null,
+    })
   },
 
   clearError: () => set({ error: null }),

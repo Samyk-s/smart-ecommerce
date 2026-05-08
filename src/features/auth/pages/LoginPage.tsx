@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
+import { GoogleAuthButton } from '@/features/auth/components/GoogleAuthButton'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
@@ -12,7 +13,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  const { login, status, error, clearError } = useAuthStore()
+  const { login, loginWithGoogle, status, error, clearError } = useAuthStore()
   const navigate = useNavigate()
 
   const isLoading = status === 'loading'
@@ -29,11 +30,28 @@ export function LoginPage() {
     await login({ email, password })
   }
 
+  const handleGoogleLogin = async () => {
+    await loginWithGoogle()
+  }
+
   return (
     <AuthLayout
       title="Welcome back"
       subtitle="Sign in to your SmartShop account"
     >
+      <GoogleAuthButton isLoading={isLoading} onClick={handleGoogleLogin} />
+
+      <div className="relative my-5">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs">
+          <span className="bg-card px-2 text-muted-foreground">
+            Or sign in with email
+          </span>
+        </div>
+      </div>
+
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 
         {/* Server / store error */}

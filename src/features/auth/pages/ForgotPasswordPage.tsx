@@ -1,14 +1,26 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
+import { useAuthStore } from '@/shared/stores/authStore'
 
 export function ForgotPasswordPage() {
-  // Will be wired to authStore in Phase 3
-  const isLoading = false
-  const isSuccess = false
+  const [email, setEmail] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
+  const { forgotPassword, status, error, clearError } = useAuthStore()
+
+  const isLoading = status === 'loading'
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await forgotPassword(email)
+    if (!useAuthStore.getState().error) {
+      setIsSuccess(true)
+    }
+  }
 
   return (
     <AuthLayout
@@ -28,7 +40,16 @@ export function ForgotPasswordPage() {
           </Button>
         </div>
       ) : (
-        <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          {error && (
+            <div
+              role="alert"
+              className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            >
+              {error}
+            </div>
+          )}
+
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -38,6 +59,11 @@ export function ForgotPasswordPage() {
               autoComplete="email"
               disabled={isLoading}
               required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (error) clearError()
+              }}
             />
           </div>
 
@@ -45,7 +71,7 @@ export function ForgotPasswordPage() {
             {isLoading ? (
               <>
                 <Loader2 className="animate-spin" />
-                Sending…
+                Sending...
               </>
             ) : (
               'Send reset link'

@@ -13,7 +13,7 @@ export function CartSummary() {
   const clearCart = useCartStore((state) => state.clearCart)
 
   // Shipping is free — swap this with real shipping logic when backend is added
-  const shipping = 0
+  const shipping: number = 0
   const total = subtotal + shipping
 
   return (

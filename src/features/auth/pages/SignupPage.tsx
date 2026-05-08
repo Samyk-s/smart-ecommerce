@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
+import { GoogleAuthButton } from '@/features/auth/components/GoogleAuthButton'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
@@ -17,7 +18,7 @@ export function SignupPage() {
   // Client-side validation errors (password mismatch, etc.)
   const [localError, setLocalError] = useState<string | null>(null)
 
-  const { signup, status, error, clearError } = useAuthStore()
+  const { signup, loginWithGoogle, status, error, clearError } = useAuthStore()
   const navigate = useNavigate()
 
   const isLoading = status === 'loading'
@@ -42,11 +43,28 @@ export function SignupPage() {
     await signup({ email, password, displayName })
   }
 
+  const handleGoogleSignup = async () => {
+    await loginWithGoogle()
+  }
+
   return (
     <AuthLayout
       title="Create account"
       subtitle="Start shopping with SmartShop today"
     >
+      <GoogleAuthButton isLoading={isLoading} onClick={handleGoogleSignup} />
+
+      <div className="relative my-5">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs">
+          <span className="bg-card px-2 text-muted-foreground">
+            Or create account with email
+          </span>
+        </div>
+      </div>
+
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 
         {/* Error banner — shows both client-side and store errors */}
