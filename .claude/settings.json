@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vite *)",
+      "Bash(Get-ChildItem -Path src -Recurse -File)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(npx shadcn@latest --version)",
+      "Bash(npx shadcn@latest init --help)",
+      "Bash(npx shadcn@latest init --template vite --yes)",
+      "Bash(npx shadcn@latest init --template vite --yes --base radix)",
+      "Bash(npx shadcn@latest init --template vite --yes --base radix --preset nova)",
+      "Bash(npx shadcn@latest add button input label card badge --yes)",
+      "Bash(Get-ChildItem -Recurse -Filter \"button.tsx\")",
+      "Bash(Select-Object FullName)",
+      "Bash(npm install *)"
+    ]
+  }
+}

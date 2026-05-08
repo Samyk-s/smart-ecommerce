@@ -1,7 +1,2 @@
-export default function App() {
-  return (
-    <div className="p-10 text-2xl font-bold text-blue-600">
-      Tailwind is working 🚀
-    </div>
-  );
-}
+// Entry point shim — real implementation lives in src/app/App.tsx
+export { default } from '@/app/App'
